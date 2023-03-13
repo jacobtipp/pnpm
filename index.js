@@ -89,11 +89,13 @@ async function publish(pluginConfig, context) {
     throw new AggregateError(errors);
   }
 
+  let tarball;
+
   if (!prepared) {
-    await prepareNpm(npmrc, pluginConfig, context);
+    tarball = await prepareNpm(npmrc, pluginConfig, context);
   }
 
-  return publishNpm(npmrc, pluginConfig, pkg, context);
+  return publishNpm(npmrc, {...pluginConfig, tarball}, pkg, context);
 }
 
 async function addChannel(pluginConfig, context) {
