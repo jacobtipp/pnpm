@@ -11,6 +11,7 @@ const publishNpm = require('./lib/publish');
 
 let verified;
 let prepared;
+let tarball;
 const npmrc = tempy.file({name: '.npmrc'});
 
 async function verifyConditions(pluginConfig, context) {
@@ -65,7 +66,7 @@ async function prepare(pluginConfig, context) {
     throw new AggregateError(errors);
   }
 
-  await prepareNpm(npmrc, pluginConfig, context);
+  tarball = await prepareNpm(npmrc, pluginConfig, context);
   prepared = true;
 }
 
@@ -89,7 +90,6 @@ async function publish(pluginConfig, context) {
     throw new AggregateError(errors);
   }
 
-  let tarball;
 
   if (!prepared) {
     tarball = await prepareNpm(npmrc, pluginConfig, context);
